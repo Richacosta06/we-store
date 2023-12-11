@@ -1,7 +1,7 @@
 import { initialData } from "@/seed/seed";
 import notFound from "../not-found";
 import { titleFont } from "@/config/fonts";
-import { SizeSelector } from "@/components";
+import { QuantitySelector, SizeSelector } from "@/components";
 
 interface Props {
     params: {
@@ -42,6 +42,9 @@ export default function ({ params }: Props) {
                 />
 
                 {/* Selector de Cantidad */}
+                <QuantitySelector
+                    quantity={1}
+                />
 
                 {/* Button */}
                 <button className="btn-primary my-5">Agregar al carrito</button>
