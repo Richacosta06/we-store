@@ -1,6 +1,7 @@
 import { initialData } from "@/seed/seed";
 import notFound from "../not-found";
 import { titleFont } from "@/config/fonts";
+import { SizeSelector } from "@/components";
 
 interface Props {
     params: {
@@ -35,6 +36,10 @@ export default function ({ params }: Props) {
                 <p className="text-base mb-5">${product.price}</p>
 
                 {/* Selector de Tallas */}
+                <SizeSelector
+                    selectedSize={ product.sizes[0]}
+                    availableSizes={ product.sizes}
+                />
 
                 {/* Selector de Cantidad */}
 
