@@ -54,11 +54,10 @@ export default function () {
                     <div className="bg-white rounded-xl shadow-xl p-7">
                         <h2 className="text-2xl mb-2">Dirección de entrega</h2>
                         <div className="mb-10">
-                            <p className="text-xl">Fernando Herrera</p>
-                            <p>Av. Siempre viva 123</p>
-                            <p>Col. Centro</p>
-                            <p>Alcaldía Cuauhtémoc</p>
-                            <p>Ciudad de México</p>
+                            <p className="text-xl">Richard Acosta</p>
+                            <p>Av. Siempre viva 742</p>
+                            <p>Springfield</p>
+                            <p>Estados Unidos</p>
                             <p>CP 123123</p>
                             <p>123.123.123</p>
                         </div>
@@ -75,7 +74,7 @@ export default function () {
                             <span>Subtotal</span>
                             <span className="text-right">$ 100</span>
 
-                            <span>Impuestos (15%)</span>
+                            <span>ITBMS (7%)</span>
                             <span className="text-right">$ 100</span>
 
                             <span className="mt-5 text-2xl">Total:</span>
@@ -104,7 +103,7 @@ export default function () {
                                 className="flex btn-primary justify-center"
                                 href="/orders/123"
                             >
-                                Colocar orden
+                                Realizar Pedido
                             </Link>
                         </div>
                     </div>
