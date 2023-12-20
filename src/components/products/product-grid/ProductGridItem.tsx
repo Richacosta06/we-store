@@ -33,7 +33,7 @@ export const ProductGridItem = ({ product }: Props) => {
                 >
                     {product.title}
                 </Link>
-                <span className="font-bold">${product.price}</span>
+                <span className="font-bold">${product.normal_price}</span>
             </div>
         </div>
     );
