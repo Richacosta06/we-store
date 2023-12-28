@@ -10,7 +10,7 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
     console.log(searchParams);
 
-    const { products } = await getPaginatedProductsWithImages();
+    const { products } = await getPaginatedProductsWithImages({});
 
     return (
         <>
