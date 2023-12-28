@@ -1,7 +1,7 @@
 export interface Product {
     id:string;
     description: string;
-    //todo: images: string[];
+    images: string[];
     //inStock: number;
     normal_price: number;
     //sizes: Size[];
