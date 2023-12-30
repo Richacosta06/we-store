@@ -4,6 +4,7 @@ export interface Product {
     images: string[];
     //inStock: number;
     normal_price: number;
+    offer_price: number;
     //sizes: Size[];
     slug: string;
     tags: string[];

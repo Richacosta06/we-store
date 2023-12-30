@@ -2,14 +2,18 @@
 
 import prisma from "@/lib/prisma";
 
+
 interface PaginationOptions {
     page?: number;
     take?: number;
+    category?: string;
 }
+
 
 export const getPaginatedProductsWithImages = async ({
     page = 1,
     take = 12,
+    category,
 }: PaginationOptions) => {
     if (isNaN(Number(page))) page = 1;
     if (page < 1) page = 1;
@@ -26,14 +30,20 @@ export const getPaginatedProductsWithImages = async ({
                     },
                 },
             },
+            where: {
+                category: {
+                    name: category, 
+                },
+            },
         });
 
-        // Obtener el total de páginas
-        // todo:
+
         const totalCount = await prisma.product.count({
-            // where: {
-            //     gender: gender,
-            // },
+            where: {
+                category: {
+                    name: category, 
+                },
+            },
         });
 
         const totalPages = Math.ceil(totalCount / take);
@@ -43,10 +53,11 @@ export const getPaginatedProductsWithImages = async ({
             totalPages: totalPages,
             products: products.map((product) => ({
                 ...product,
-                images: product.ProductImage.map((image) => image.url),
+                images: product.ProductImage.map((image) => image.url), //Linea 52
             })),
         };
     } catch (error) {
-        throw new Error("no se pudo cargar los productos");
+        console.error("Error al cargar los productos:", error);
+        throw error; 
     }
 };
