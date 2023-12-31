@@ -1,8 +1,10 @@
+export const revalidate = 60;
+
 import { getPaginatedProductsWithImages } from "@/actions";
-import { ProductGrid, Title } from "@/components";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { ProductGrid, Title, Pagination } from "@/components";
+
 import { redirect } from "next/navigation";
-import { Product } from '../../interfaces/product.interface';
+
 
 interface Props {
     searchParams: {
@@ -10,7 +12,7 @@ interface Props {
     };
 }
 
-export default async function Home({ searchParams }: Props) {
+export default async function HomePage({ searchParams }: Props) {
     const page = searchParams.page ? parseInt(searchParams.page) : 1;
 
     const { products, currentPage, totalPages } =

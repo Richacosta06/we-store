@@ -1,4 +1,6 @@
-import { notFound, redirect } from "next/navigation";
+export const revalidate = 60;
+
+import { redirect } from "next/navigation";
 import { Pagination, ProductGrid, Title } from "@/components";
 import { getPaginatedProductsWithImages } from "@/actions";
 
@@ -15,11 +17,8 @@ interface Props {
     };
 }
 
-export default async function ({ params, searchParams }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
     const { category } = params;
-
-    console.log(category)
-    console.log(params)
 
     const page = searchParams.page ? parseInt(searchParams.page) : 1;
 

@@ -18,7 +18,7 @@ interface Props {
     };
 }
 
-export default function ({ params }: Props) {
+export default function OrderByIdPage({ params }: Props) {
     const { id } = params;
 
     // Todo: verificar
