@@ -1,3 +1,5 @@
+import { Variable } from "@prisma/client";
+
 export interface Product {
     id:string;
     description: string;
@@ -5,7 +7,7 @@ export interface Product {
     //inStock: number;
     normal_price: number;
     offer_price: number;
-    //sizes: Size[];
+    variables: Variable[];
     slug: string;
     tags: string[];
     title: string;

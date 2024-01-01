@@ -10,7 +10,7 @@
 4. build database ```docker compose up -d```
 5. run migrations  ```npx prisma migrate dev```
 6. run seed ```npm run seed```
-7. run project ```npk run dev```
+7. run project ```npm run dev```
 
 
 

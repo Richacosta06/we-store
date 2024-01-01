@@ -1,12 +1,14 @@
-import { initialData } from "@/seed/seed";
+export const revalidate = 604800; //7 Dias
+
 import notFound from "../not-found";
 import { titleFont } from "@/config/fonts";
 import {
     ProductMobileSlideshow,
     ProductSlideshow,
     QuantitySelector,
-    SizeSelector,
+    VariableSelector,
 } from "@/components";
+import { getProductBySlug } from "@/actions";
 
 interface Props {
     params: {
@@ -14,12 +16,11 @@ interface Props {
     };
 }
 
-export default function ProductBySlugPage({ params }: Props) {
+export default async function ProductBySlugPage({ params }: Props) {
     const { slug } = params;
-    const product = initialData.products.find(
-        (product) => product.slug === slug
-    );
-
+    const product = await getProductBySlug(slug);
+    const variables = product?.variables || {};
+    
     if (!product) {
         notFound();
 
@@ -52,12 +53,11 @@ export default function ProductBySlugPage({ params }: Props) {
                 >
                     {product.title}
                 </h1>
-                <p className="text-base mb-5">${product.price}</p>
+                <p className="text-base mb-5">${product.normal_price}</p>
 
                 {/* Selector de Tallas */}
-                <SizeSelector
-                    selectedSize={product.sizes[0]}
-                    availableSizes={product.sizes}
+                <VariableSelector
+                    variables={variables} 
                 />
 
                 {/* Selector de Cantidad */}
