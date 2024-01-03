@@ -37,21 +37,31 @@ export const AddToCart = ({ variants, hasVariables, productStock }: Props) => {
         setSelectedAttributes(updatedAttributes);
         console.log(`Atributos seleccionados actualizados:`, updatedAttributes);
 
-        // Buscar la variante que coincide con la selección actual
-        const matchingVariant = variants.find((variant) =>
-            Object.entries(updatedAttributes).every(
-                ([name, value]) => variant.attributes[name] === value
+        // Verificar si todos los atributos necesarios han sido seleccionados
+        // Esto se hace asegurando que cada tipo de atributo en las variantes tenga una selección
+        const allAttributesSelected = variants.some((variant) =>
+            Object.keys(variant.attributes).every(
+                (name) => updatedAttributes[name]
             )
         );
 
-        if (matchingVariant) {
-            setSelectedVariant(matchingVariant);
-            console.log("Variante encontrada:", matchingVariant);
-        } else {
-            console.log(
-                "No se encontró una variante que coincida con los atributos seleccionados:",
-                updatedAttributes
+        if (allAttributesSelected) {
+            // Buscar la variante que coincide con la selección actual
+            const matchingVariant = variants.find((variant) =>
+                Object.entries(updatedAttributes).every(
+                    ([name, value]) => variant.attributes[name] === value
+                )
             );
+
+            if (matchingVariant) {
+                setSelectedVariant(matchingVariant);
+                console.log("Variante encontrada:", matchingVariant);
+            } else {
+                console.log(
+                    "No se encontró una variante que coincida con los atributos seleccionados:",
+                    updatedAttributes
+                );
+            }
         }
     };
 
