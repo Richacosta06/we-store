@@ -6,7 +6,8 @@ export * from './ui/title/Title'
 export * from './ui/top-menu/TopMenu'
 
 export * from './products/product-grid/ProductGrid'
-export * from './porduct/size-selector/VariableSelector'
+export * from './porduct/variable-selector/VariableSelector'
 export * from './porduct/quantity-selector/QuantitySelector'
 export * from './porduct/slidesshow/ProductSlideshow'
 export * from './porduct/slidesshow/ProductMobileSlideshow'
+

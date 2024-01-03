@@ -7,7 +7,7 @@ export interface Product {
     //inStock: number;
     normal_price: number;
     offer_price: number;
-    variables: Variable[];
+    //variables: Variable[];
     slug: string;
     tags: string[];
     title: string;

@@ -2,13 +2,10 @@ export const revalidate = 604800; //7 Dias
 
 import notFound from "../not-found";
 import { titleFont } from "@/config/fonts";
-import {
-    ProductMobileSlideshow,
-    ProductSlideshow,
-    QuantitySelector,
-    VariableSelector,
-} from "@/components";
+import { ProductMobileSlideshow, ProductSlideshow } from "@/components";
 import { getProductBySlug } from "@/actions";
+import { ResolvingMetadata } from "next/types";
+import AddToCart from "./ui/AddToCart";
 
 interface Props {
     params: {
@@ -16,16 +13,43 @@ interface Props {
     };
 }
 
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    // read route params
+    const slug = params.slug;
+
+    // fetch data
+    const product = await getProductBySlug(slug);
+
+    // optionally access and extend (rather than replace) parent metadata
+    //const previousImages = (await parent).openGraph?.images || []
+
+    return {
+        title: product?.title,
+        description: product?.description ?? "",
+        openGraph: {
+            title: product?.title,
+            description: product?.description ?? "",
+            images: [`/products/${product?.images[1]}`],
+        },
+    };
+}
+
 export default async function ProductBySlugPage({ params }: Props) {
     const { slug } = params;
     const product = await getProductBySlug(slug);
-    const variables = product?.variables || {};
-    
+    const variants = product?.variants ?? [];
+    const productStock = product?.stock ?? 0;
+    const hasVariables = product?.hasVariables ?? false;
+
     if (!product) {
         notFound();
 
         return <div>Producto no encontrado</div>;
     }
+
     return (
         <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-5 gap-3">
             {/* Slideshow */}
@@ -55,16 +79,13 @@ export default async function ProductBySlugPage({ params }: Props) {
                 </h1>
                 <p className="text-base mb-5">${product.normal_price}</p>
 
-                {/* Selector de Tallas */}
-                <VariableSelector
-                    variables={variables} 
+                <AddToCart
+                    variants={variants}
+                    hasVariables={hasVariables}
+                    productStock={productStock}
+                    attributeTypes={[]} // Ejemplo: tipos de atributos
+                    
                 />
-
-                {/* Selector de Cantidad */}
-                <QuantitySelector quantity={1} />
-
-                {/* Button */}
-                <button className="btn-primary my-5">Agregar al carrito</button>
 
                 {/* Descripción */}
                 <h3 className="font-bold text-sm">Descripción</h3>

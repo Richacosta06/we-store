@@ -4,42 +4,31 @@ import prisma from "@/lib/prisma";
 import { Product } from "@/interfaces";
 
 // Definición de tipos
-interface Stock {
-    quantity: number;
+interface Variant {
+    attributes: Record<string, string>; // Ejemplo: { Talla: "M", Color: "Rojo" }
+    stock: number;
 }
 
-interface Variable {
-    variable_type: string;
-    variable_value: string;
-    Stock: Stock;
-}
-
-interface VariableGroupItem {
-    variable_value: string;
-    Stock: number;
-}
-
-interface ProductWithImagesAndVariables extends Product {
+interface ProductWithImagesAndVariants extends Product {
     images: string[];
-    variables: Record<string, VariableGroupItem[]>;
+    variants: Variant[];
+    stock: number;
+    hasVariables: boolean;
+    
 }
 
 export const getProductBySlug = async (
     slug: string
-): Promise<ProductWithImagesAndVariables | null> => {
+): Promise<ProductWithImagesAndVariants | null> => {
     try {
         const product = await prisma.product.findFirst({
             include: {
-                ProductImage: {
-                    select: { url: true },
-                },
-                Variable: {
-                    select: {
-                        variable_type: true,
-                        variable_value: true,
-                        Stock: {
-                            select: {
-                                quantity: true,
+                ProductImage: { select: { url: true } },
+                ProductVariant: {
+                    include: {
+                        ProductVariantAttribute: {
+                            include: {
+                                attribute: true,
                             },
                         },
                     },
@@ -47,28 +36,28 @@ export const getProductBySlug = async (
             },
             where: { slug: slug },
         });
-
         if (!product) return null;
 
-        const variablesGroupedByType = product.Variable.reduce(
-            (acc: Record<string, VariableGroupItem[]>, variable) => {
-                const { variable_type, variable_value, Stock } = variable;
+        const variants = product.ProductVariant.map((variant) => {
+            const attributes = variant.ProductVariantAttribute.reduce<Record<string, string>>(
+                (acc, pva) => {
+                    acc[pva.attribute.name] = pva.value;
 
-                if (!acc[variable_type]) acc[variable_type] = [];
-                acc[variable_type].push({
-                    variable_value,
-                    Stock: Stock ? Stock.quantity : 0, 
-                });
+                    return acc;
+                },
+                {}
+            );
 
-                return acc;
-            },
-            {}
-        );
+            return {
+                attributes,
+                stock: variant.stock,
+            };
+        });
 
         return {
             ...product,
             images: product.ProductImage.map((image) => image.url),
-            variables: variablesGroupedByType,
+            variants: variants,
         };
     } catch (error) {
         console.log(error);

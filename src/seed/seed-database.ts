@@ -1,50 +1,51 @@
 import { initialData } from "./seed";
 import prisma from "../lib/prisma";
 
+
 async function main() {
-    //Delete
-    // await Promise.all([
+    // Delete existing data
     await prisma.productImage.deleteMany();
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
-    await prisma.stock.deleteMany();
-    await prisma.variable.deleteMany();
-    // ]);
+    await prisma.attribute.deleteMany();
+    await prisma.productVariant.deleteMany();
 
-    const { categories, products } = initialData;
-
-    // Categories
-    // {
-    //     name: 'shirt'
-    // }
-
-    const categoriesData = categories.map((category) => ({
-        name: category,
-    }));
-
-    await prisma.category.createMany({
-        data: categoriesData,
+    // Create global attributes
+    const sizeAttribute = await prisma.attribute.create({
+        data: { name: "Talla" },
+    });
+    const colorAttribute = await prisma.attribute.create({
+        data: { name: "Color" },
     });
 
+    // Create categories
+    const categoriesData = initialData.categories.map((category) => ({
+        name: category,
+    }));
+    await prisma.category.createMany({ data: categoriesData });
     const categoriesDB = await prisma.category.findMany();
-
     const categoriesMap = categoriesDB.reduce((map, category) => {
         map[category.name.toLowerCase()] = category.id;
         return map;
-    }, {} as Record<string, string>); //<string=shirt, string=categoryID>
+    }, {} as Record<string, string>);
 
-    // Productos
 
-    products.forEach(async (product) => {
+    // Create products
+    for (const product of initialData.products) {
         const { type, images, inStock, price, sizes, ...rest } = product;
+        const hasVariables = Math.random() > 0.5;
 
         const dbProduct = await prisma.product.create({
             data: {
                 ...rest,
                 categoryId: categoriesMap[type],
                 normal_price: price,
+                offer_price: price - price /1.20,
+                hasVariables: hasVariables,
+                stock: hasVariables ? 0 : 100, // Assign stock if no variants
             },
         });
+
 
         // Images
         const imagesData = images.map((image) => ({
@@ -55,10 +56,37 @@ async function main() {
         await prisma.productImage.createMany({
             data: imagesData,
         });
-    });
+
+        // Create variants for products with variables
+        if (hasVariables) {
+            const sizes = ["M", "L", "XL"];
+            const colors = ["Rojo", "Azul"];
+
+            for (const size of sizes) {
+                for (const color of colors) {
+                    const variant = await prisma.productVariant.create({
+                        data: {
+                            productId: dbProduct.id,
+                            stock: 100, // Assign stock for this variant
+                        },
+                    });
+
+                    // Associate size and color with the variant
+                    await prisma.productVariantAttribute.createMany({
+                        data: [
+                            { variantId: variant.id, attributeId: sizeAttribute.id, value: size },
+                            { variantId: variant.id, attributeId: colorAttribute.id, value: color },
+                        ],
+                    });
+                }
+            }
+        }
+    }
+
+
+    }
 
     console.log("Seed ejecutado correctamente");
-}
 
 (() => {
     if (process.env.NODE_ENV === "production") return;
