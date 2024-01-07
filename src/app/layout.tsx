@@ -4,6 +4,7 @@ import { inter } from '@/config/fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('http://localhost:3000'),
   title: {
     template: '%s - We | Store',
     default: 'Home - We | Store'

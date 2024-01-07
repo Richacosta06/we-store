@@ -3,6 +3,7 @@ import clsx from "clsx";
 interface Variant {
     attributes: Record<string, string>;
     stock: number;
+    
 }
 
 interface Props {

@@ -6,6 +6,8 @@ import { ProductMobileSlideshow, ProductSlideshow } from "@/components";
 import { getProductBySlug } from "@/actions";
 import { ResolvingMetadata } from "next/types";
 import AddToCart from "./ui/AddToCart";
+import { Product } from '../../../../interfaces/product.interface';
+import { currencyFormat } from "@/utils";
 
 interface Props {
     params: {
@@ -34,6 +36,7 @@ export async function generateMetadata(
             description: product?.description ?? "",
             images: [`/products/${product?.images[1]}`],
         },
+        
     };
 }
 
@@ -49,7 +52,7 @@ export default async function ProductBySlugPage({ params }: Props) {
 
         return <div>Producto no encontrado</div>;
     }
-
+    
     return (
         <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-5 gap-3">
             {/* Slideshow */}
@@ -75,15 +78,18 @@ export default async function ProductBySlugPage({ params }: Props) {
                 <h1
                     className={` ${titleFont.className} antialiased font-bold text-lg`}
                 >
-                    {product.title}
+                    {product.title} - 
                 </h1>
-                <p className="text-base mb-5">${product.normal_price}</p>
+                <p className="text-base mb-5">{currencyFormat(product.normal_price)}</p>
 
                 <AddToCart
+                    product={product}
                     variants={variants}
                     hasVariables={hasVariables}
                     productStock={productStock}
-                    attributeTypes={[]} // Ejemplo: tipos de atributos
+                    
+                    //attributeTypes={[]} // error: Type '{ variants: Variant[]; hasVariables: boolean; productStock: number; attributeTypes: never[]; }' is not assignable to type 'IntrinsicAttributes & Props'.
+
                     
                 />
 

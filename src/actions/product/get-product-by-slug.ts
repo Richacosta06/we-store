@@ -9,12 +9,11 @@ interface Variant {
     stock: number;
 }
 
-interface ProductWithImagesAndVariants extends Product {
+export interface ProductWithImagesAndVariants extends Product {
     images: string[];
     variants: Variant[];
     stock: number;
     hasVariables: boolean;
-    
 }
 
 export const getProductBySlug = async (
@@ -54,7 +53,8 @@ export const getProductBySlug = async (
             };
         });
 
-        return {
+        return { 
+
             ...product,
             images: product.ProductImage.map((image) => image.url),
             variants: variants,

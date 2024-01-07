@@ -1,4 +1,4 @@
-import { Variable } from "@prisma/client";
+import { Variant } from '../app/(shop)/product/[slug]/ui/AddToCart';
 
 export interface Product {
     id:string;
@@ -14,6 +14,18 @@ export interface Product {
     //TODO: type: Type;
     //gender: Category;
 }
+
+export interface CartProduct {
+    id: string;
+    slug: string;
+    title: string;
+    normal_price: number;
+    offer_price: number;
+    quantity: number;
+    variant?: Variant;
+    image: string;
+  }
+  
 
 export type Category = 'men'|'women'|'kid'|'unisex';
 export type Size = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
