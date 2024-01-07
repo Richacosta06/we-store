@@ -14,6 +14,7 @@ import {
 } from "react-icons/io5";
 
 import { useUIStore } from "@/store";
+import { logout } from "@/actions";
 
 export const Sidebar = () => {
     const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
@@ -63,7 +64,8 @@ export const Sidebar = () => {
                 {/* Menú */}
 
                 <Link
-                    href="/"
+                    href="/profile"
+                    onClick={() => closeMenu()}
                     className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
                 >
                     <IoPersonOutline size={20} />
@@ -79,8 +81,9 @@ export const Sidebar = () => {
                 </Link>
 
                 <Link
-                    href="/"
+                    href="/auth/login"
                     className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                    onClick={() => closeMenu()}
                 >
                     <IoLogInOutline size={20} />
                     <span className="ml-3 text-xl">Ingresar</span>
@@ -89,6 +92,10 @@ export const Sidebar = () => {
                 <Link
                     href="/"
                     className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                    onClick={() => {
+                        logout(); 
+                        closeMenu();
+                    }}
                 >
                     <IoLogOutOutline size={20} />
                     <span className="ml-3 text-xl">Salir</span>

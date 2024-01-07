@@ -1,14 +1,17 @@
 import { initialData } from "./seed";
 import prisma from "../lib/prisma";
 
-
 async function main() {
     // Delete existing data
     await prisma.productImage.deleteMany();
-    await prisma.product.deleteMany();
-    await prisma.category.deleteMany();
+    await prisma.productVariantAttribute.deleteMany();
     await prisma.attribute.deleteMany();
     await prisma.productVariant.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.category.deleteMany();
+
+
 
     // Create global attributes
     const sizeAttribute = await prisma.attribute.create({
@@ -29,7 +32,6 @@ async function main() {
         return map;
     }, {} as Record<string, string>);
 
-
     // Create products
     for (const product of initialData.products) {
         const { type, images, inStock, price, sizes, ...rest } = product;
@@ -40,12 +42,11 @@ async function main() {
                 ...rest,
                 categoryId: categoriesMap[type],
                 normal_price: price,
-                offer_price: price - price /1.20,
+                offer_price: price - price / 1.2,
                 hasVariables: hasVariables,
                 stock: hasVariables ? 0 : 100, // Assign stock if no variants
             },
         });
-
 
         // Images
         const imagesData = images.map((image) => ({
@@ -74,19 +75,32 @@ async function main() {
                     // Associate size and color with the variant
                     await prisma.productVariantAttribute.createMany({
                         data: [
-                            { variantId: variant.id, attributeId: sizeAttribute.id, value: size },
-                            { variantId: variant.id, attributeId: colorAttribute.id, value: color },
+                            {
+                                variantId: variant.id,
+                                attributeId: sizeAttribute.id,
+                                value: size,
+                            },
+                            {
+                                variantId: variant.id,
+                                attributeId: colorAttribute.id,
+                                value: color,
+                            },
                         ],
                     });
                 }
             }
         }
+        // Crear Usuarios
+
     }
+    const { users } = initialData;
 
+    await prisma.user.createMany({
+        data: users,
+    });
+}
 
-    }
-
-    console.log("Seed ejecutado correctamente");
+console.log("Seed ejecutado correctamente");
 
 (() => {
     if (process.env.NODE_ENV === "production") return;

@@ -52,6 +52,12 @@ export const TopMenu = () => {
                 >
                     Shirts
                 </Link>
+                <Link
+                    className="m2 p-2 rounded-md transition-all hover:bg-gray-200"
+                    href="/category/Pants"
+                >
+                    Pants
+                </Link>
             </div>
 
             {/* Search, Cart, Menu */}
