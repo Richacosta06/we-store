@@ -104,3 +104,8 @@ model User {
   image         String?
 }
 
+model Country {
+  id            String    @id
+  name          String
+}
+
