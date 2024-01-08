@@ -21,9 +21,7 @@ export async function authenticate(
     } catch (error) {
         console.log(error);
 
-        return 'CredentialsSignin'
-
-      
+        return "CredentialsSignin";
     }
 }
 

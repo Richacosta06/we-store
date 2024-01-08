@@ -1,25 +1,28 @@
-import type { Metadata } from 'next'
-import { inter } from '@/config/fonts'
+import type { Metadata } from "next";
+import { inter } from "@/config/fonts";
 
-import './globals.css'
+import "./globals.css";
+import { Provider } from "@/components";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('http://localhost:3000'),
-  title: {
-    template: '%s - We | Store',
-    default: 'Home - We | Store'
-  },
-  description: 'Tu Marketplace',
-}
+    metadataBase: new URL("http://localhost:3000"),
+    title: {
+        template: "%s - We | Store",
+        default: "Home - We | Store",
+    },
+    description: "Tu Marketplace",
+};
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  )
+    return (
+        <html lang="en">
+            <body className={inter.className}>
+                <Provider>{children}</Provider>
+            </body>
+        </html>
+    );
 }

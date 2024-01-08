@@ -11,6 +11,35 @@ export const authConfig: NextAuthConfig = {
         newUser: "/auth/new-account",
     },
 
+    callbacks: {
+        authorized({ auth, request: { nextUrl } }) {
+            console.log({ auth });
+            // const isLoggedIn = !!auth?.user;
+
+            // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+            // if (isOnDashboard) {
+            //   if (isLoggedIn) return true;
+            //   return false; // Redirect unauthenticated users to login page
+            // } else if (isLoggedIn) {
+            //   return Response.redirect(new URL('/dashboard', nextUrl));
+            // }
+            return true;
+        },
+
+        jwt({ token, user }) {
+            if (user) {
+                token.data = user;
+            }
+
+            return token;
+        },
+
+        session({ session, token, user }) {
+            session.user = token.data as any;
+            return session;
+        },
+    },
+
     providers: [
         Credentials({
             async authorize(credentials) {
@@ -25,8 +54,6 @@ export const authConfig: NextAuthConfig = {
 
                 const { email, password } = parsedCredentials.data;
 
-                console.log(email, password);
-
                 //   Buscar el correo
                 const user = await prisma.user.findUnique({
                     where: { email: email.toLowerCase() },
@@ -38,11 +65,11 @@ export const authConfig: NextAuthConfig = {
 
                 // Regresar el usuario sin el password
                 const { password: _, ...rest } = user;
-                console.log(rest)
+                
                 return rest;
             },
         }),
     ],
 };
 
-export const { signIn, signOut, auth } = NextAuth(authConfig);
+export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);
