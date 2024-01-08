@@ -13,15 +13,16 @@ export const authConfig: NextAuthConfig = {
 
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
-            console.log({ auth });
-            // const isLoggedIn = !!auth?.user;
+            //console.log({ auth });
+            const isLoggedIn = !!auth?.user;
 
-            // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-            // if (isOnDashboard) {
-            //   if (isLoggedIn) return true;
-            //   return false; // Redirect unauthenticated users to login page
-            // } else if (isLoggedIn) {
-            //   return Response.redirect(new URL('/dashboard', nextUrl));
+            const isOnAddress = nextUrl.pathname.startsWith('/checkout/address');
+            if (isOnAddress) {
+              if (isLoggedIn) return true;
+              return false; // Redirect unauthenticated users to login page
+            } 
+            // else if (isLoggedIn) {
+            //   return Response.redirect(new URL('/checkout/address', nextUrl));
             // }
             return true;
         },
@@ -73,3 +74,7 @@ export const authConfig: NextAuthConfig = {
 };
 
 export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);
+
+
+
+
