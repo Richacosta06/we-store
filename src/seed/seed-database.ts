@@ -1,9 +1,10 @@
 import { initialData } from "./seed";
 import prisma from "../lib/prisma";
-import { countries } from './seed-countries';
+import { countries } from "./seed-countries";
 
 async function main() {
     // Delete existing data
+    await prisma.userAddress.deleteMany();
     await prisma.country.deleteMany();
     await prisma.productImage.deleteMany();
     await prisma.productVariantAttribute.deleteMany();
@@ -12,8 +13,6 @@ async function main() {
     await prisma.product.deleteMany();
     await prisma.user.deleteMany();
     await prisma.category.deleteMany();
-
-
 
     // Create global attributes
     const sizeAttribute = await prisma.attribute.create({
@@ -93,7 +92,6 @@ async function main() {
             }
         }
         // Crear Usuarios
-
     }
     const { users } = initialData;
 
@@ -101,11 +99,9 @@ async function main() {
         data: users,
     });
 
-
     await prisma.country.createMany({
         data: countries,
     });
-    
 }
 
 console.log("Seed ejecutado correctamente");

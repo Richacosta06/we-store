@@ -13,6 +13,7 @@ import CartPage from '../../../cart/page';
 export interface Variant {
     attributes: Record<string, string>;
     stock: number;
+    id: string;
 }
 
 interface Props {
@@ -76,7 +77,8 @@ export const AddToCart = ({
 
             if (matchingVariant) {
                 setSelectedVariant(matchingVariant);
-                // console.log("Variante encontrada:", matchingVariant);
+                console.log("Variante encontrada:", selectedVariant);
+                
             } else {
                 // console.log(
                 //     "No se encontró una variante que coincida con los atributos seleccionados:",
@@ -86,7 +88,6 @@ export const AddToCart = ({
         }
     };
 
-    //revisa este fracmento de codigo, no esta funcionando
     const addToCart = () => {
         setposted(true);
         if (!selectedVariant && hasVariables) return;
@@ -109,6 +110,8 @@ export const AddToCart = ({
             variant: selectedVariant, 
             image: product.images[0],
         };
+
+        console.log("producto en carrito", CartProduct);
 
         addProductToCart(CartProduct);
         setposted(false);

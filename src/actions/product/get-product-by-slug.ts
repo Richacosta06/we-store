@@ -48,6 +48,7 @@ export const getProductBySlug = async (
             );
 
             return {
+                id: variant.id,
                 attributes,
                 stock: variant.stock,
             };
