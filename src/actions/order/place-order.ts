@@ -18,8 +18,6 @@ export const placeOrder = async (
     const session = await auth();
     const userId = session?.user.id;
 
-    console.log("Productos IDs y Variante", { productIds });
-
     if (!userId) {
         return {
             ok: false,

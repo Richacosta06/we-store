@@ -29,7 +29,8 @@ export const PlaceOrder = () => {
         const productsToOrder = cart.map((product) => ({
             productId: product.id,
             quantity: product.quantity,
-            variantId: product.variant?.id,
+            variantId: product.variant?.id, 
+
         }));
 
         const resp = await placeOrder(productsToOrder, address);

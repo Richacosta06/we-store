@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 interface State {
     address: {
-        
+        id: string;
         firstName: string;
         lastName: string;
         address: string;
@@ -22,7 +22,7 @@ export const useAddressStore = create<State>()(
     persist(
         (set, get) => ({
             address: {
-                
+                id: "",
                 firstName: "",
                 lastName: "",
                 address: "",

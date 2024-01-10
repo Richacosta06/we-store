@@ -13,7 +13,7 @@ import { sleep } from "../../../../../utils/sleep";
 export interface Variant {
     attributes: Record<string, string>;
     stock: number;
-    //id: string;
+    id: string;
 }
 
 interface Props {

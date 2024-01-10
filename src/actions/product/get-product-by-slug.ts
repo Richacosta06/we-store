@@ -7,6 +7,7 @@ import { Product } from "@/interfaces";
 interface Variant {
     attributes: Record<string, string>; // Ejemplo: { Talla: "M", Color: "Rojo" }
     stock: number;
+    id: string;
 }
 
 export interface ProductWithImagesAndVariants extends Product {
