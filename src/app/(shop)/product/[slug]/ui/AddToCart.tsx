@@ -8,12 +8,12 @@ import { ProductWithImagesAndVariants } from "../../../../../actions/product/get
 import { useCartStore } from "@/store";
 import type { CartProduct } from "../../../../../interfaces/product.interface";
 import Link from "next/link";
-import CartPage from '../../../cart/page';
+import { sleep } from "../../../../../utils/sleep";
 
 export interface Variant {
     attributes: Record<string, string>;
     stock: number;
-    id: string;
+    //id: string;
 }
 
 interface Props {
@@ -41,6 +41,9 @@ export const AddToCart = ({
         Variant | undefined
     >();
 
+    const [stockToShow, setStockToShow] = useState<number>(productStock);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleAttributeSelection = (
         attributeName: string,
         attributeValue: string
@@ -49,12 +52,8 @@ export const AddToCart = ({
             ...selectedAttributes,
             [attributeName]: attributeValue,
         };
-        // console.log(
-        //     `Atributo seleccionado: ${attributeName} - Valor: ${attributeValue}`
-        // );
 
         setSelectedAttributes(updatedAttributes);
-        // console.log(`Atributos seleccionados actualizados:`, updatedAttributes);
 
         // Verificar si todos los atributos necesarios han sido seleccionados
         let allAttributesSelected = true;
@@ -68,7 +67,6 @@ export const AddToCart = ({
         }
 
         if (allAttributesSelected) {
-            // Buscar la variante que coincide con la selección actual
             const matchingVariant = variants.find((variant) =>
                 Object.entries(updatedAttributes).every(
                     ([name, value]) => variant.attributes[name] === value
@@ -77,18 +75,15 @@ export const AddToCart = ({
 
             if (matchingVariant) {
                 setSelectedVariant(matchingVariant);
-                console.log("Variante encontrada:", selectedVariant);
-                
+                setStockToShow(matchingVariant.stock); // Actualizar el stock a mostrar con el de la variante seleccionada
             } else {
-                // console.log(
-                //     "No se encontró una variante que coincida con los atributos seleccionados:",
-                //     updatedAttributes
-                // );
+                setStockToShow(productStock); // Revertir al stock del producto si no hay coincidencia
             }
+            console.log("Variante encontrada:", selectedVariant);
         }
     };
 
-    const addToCart = () => {
+    const addToCart = async () => {
         setposted(true);
         if (!selectedVariant && hasVariables) return;
         // console.log(
@@ -100,6 +95,21 @@ export const AddToCart = ({
         //     product
         // );
 
+        if (
+            quantity >
+            (hasVariables && selectedVariant
+                ? selectedVariant.stock
+                : productStock)
+        ) {
+            setErrorMessage(
+                "La cantidad seleccionada excede el stock disponible."
+            );
+            await sleep(3); // Espera 2 segundos
+            setErrorMessage("");
+            return;
+        }
+        setErrorMessage("");
+
         const CartProduct: CartProduct = {
             id: product.id,
             slug: product.slug,
@@ -107,7 +117,7 @@ export const AddToCart = ({
             normal_price: product.normal_price,
             offer_price: product.offer_price,
             quantity: quantity,
-            variant: selectedVariant, 
+            variant: selectedVariant,
             image: product.images[0],
         };
 
@@ -122,7 +132,7 @@ export const AddToCart = ({
 
         setTimeout(() => {
             setShowAddToCartMessage(false);
-        }, 3000); 
+        }, 3000);
     };
 
     return (
@@ -142,13 +152,23 @@ export const AddToCart = ({
                 onAttributeSelected={handleAttributeSelection}
                 selectedAttributes={selectedAttributes}
             />
+            
+            {(selectedVariant || !hasVariables) && (
+                <p className="text-green-600 mb-2">
+                    Stock disponible: <span className="font-bold">{stockToShow}</span>
+                </p>
+            )}
+            
+
             {showAddToCartMessage && (
                 <div className="bg-green-700 p-2 my-4 rounded sha text-white fade-in">
                     <Link href="/cart">
-
-                    <p>Producto agregado al carrito!
-                    <span className="cursor-pointer hover:underline mx-2">Ver Carrito</span>
-                    </p>
+                        <p>
+                            Producto agregado al carrito!
+                            <span className="cursor-pointer hover:underline mx-2">
+                                Ver Carrito
+                            </span>
+                        </p>
                     </Link>
                 </div>
             )}
@@ -156,14 +176,21 @@ export const AddToCart = ({
             {/* Selector de Cantidad */}
             <QuantitySelector
                 quantity={quantity}
-                onQuantityChanged={setQuantity}
+                onQuantityChanged={(newQuantity) => {
+                    if (newQuantity <= stockToShow) {
+                        setQuantity(newQuantity);
+                    }
+                }}
+                max={stockToShow} // Pasar el stock máximo como prop
             />
+            {errorMessage && (
+                <div className="text-white bg-red-600 rounded p-2 mt-4">
+                    {errorMessage}
+                </div>
+            )}
 
             {/* Button */}
-            <button
-                onClick={addToCart} //error: Cannot fint name addToCart
-                className="btn-primary my-5"
-            >
+            <button onClick={addToCart} className="btn-primary my-5">
                 Agregar al carrito
             </button>
         </>

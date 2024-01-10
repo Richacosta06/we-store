@@ -20,15 +20,16 @@ export const AdressList = ({ userAddresses }: Props) => {
     const address = useAddressStore((state) => state.address);
     const router = useRouter();
 
-    const handleSelectAddress = async (address: Address) => {
+    const handleSelectAddress = async (address: ExtendedAddress) => {
         setAddress(address);
+        
 
         router.push("/checkout");
     };
 
     const handleDeleteAddress = async (id: string) => {
         await deleteAddress(id);
-        window.location.reload();  //De que forma puedo evitar recargar el componente al eliminar una direccion
+        window.location.reload();  //TODO: Mejorar, eliminar la recarga de toda la pagina
     };
 
     return (
@@ -37,7 +38,7 @@ export const AdressList = ({ userAddresses }: Props) => {
                 <ul>
                     {userAddresses.map((address) => (
                         <li
-                            key={address.id} //error: Property 'id' does not exist on type 'Address'.ts(2339)
+                            key={address.id} 
                             className="cursor-pointer hover:bg-gray-400 my-4 bg-gray-200 rounded p-5"
                         >
                             <div className="flex justify-between">
@@ -57,7 +58,7 @@ export const AdressList = ({ userAddresses }: Props) => {
                                 <button
                                     onClick={() =>
                                         handleDeleteAddress(address.id)
-                                    } //error: Property 'id' does not exist on type 'Address'.ts(2
+                                    } 
                                     className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                 >
                                     Eliminar

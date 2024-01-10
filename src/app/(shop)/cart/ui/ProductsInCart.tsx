@@ -25,7 +25,9 @@ export const ProductsInCart = () => {
 
     return (
         <>
+        
             {productsInCart.map((product) => (
+                
                 <div
                     key={`${product.id}-${
                         product.variant
@@ -66,13 +68,13 @@ export const ProductsInCart = () => {
                                     : ""}
                             </p>
                         </Link>
+                        <p><span>Cantidad: </span>{product.quantity}</p>
 
-                        <QuantitySelector
-                            quantity={product.quantity}
+                         {/* <QuantitySelector   //error: Property 'max' is missing in type '{ quantity: number; onQuantityChanged: (quantity: number) => void; }' but required in type 'Props
                             onQuantityChanged={(quantity) =>
                                 updateProductQuantity(product, quantity)
                             }
-                        />
+                        />  */}
 
                         <button
                             onClick={() => removeProduct(product)}

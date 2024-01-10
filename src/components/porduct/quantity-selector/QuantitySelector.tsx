@@ -6,16 +6,31 @@ import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 interface Props {
     quantity: number;
     onQuantityChanged: (value:number) => void;
+    max: number;
 }
 
-export const QuantitySelector = ({ quantity, onQuantityChanged }: Props) => {
+export const QuantitySelector = ({ quantity, onQuantityChanged, max }: Props) => {
 
     const onValueChanged = (value: number) => {
-        if (quantity + value < 1) return;
-
-        onQuantityChanged(quantity + value);
+        // Nuevo valor basado en el cambio solicitado
+        const newValue = quantity + value;
+    
+        // Si el nuevo valor es menor que 1, no permitir la reducción adicional
+        if (newValue < 1) {
+            onQuantityChanged(1);
+            return;
+        }
+    
+        // Si el nuevo valor es mayor que el máximo, ajustar al máximo
+        if (newValue > max) {
+            onQuantityChanged(max);
+            return;
+        }
+    
+        // Si el nuevo valor está dentro del rango permitido, actualizar normalmente
+        onQuantityChanged(newValue);
     };
-
+    
     return (
         <div className="flex">
             <button onClick={() => onValueChanged(-1)}>

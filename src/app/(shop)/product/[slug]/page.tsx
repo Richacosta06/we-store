@@ -89,8 +89,6 @@ export default async function ProductBySlugPage({ params }: Props) {
                     productStock={productStock}
                     
                     //attributeTypes={[]} // error: Type '{ variants: Variant[]; hasVariables: boolean; productStock: number; attributeTypes: never[]; }' is not assignable to type 'IntrinsicAttributes & Props'.
-
-                    
                 />
 
                 {/* Descripción */}

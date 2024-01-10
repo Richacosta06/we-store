@@ -40,14 +40,13 @@ model Product {
   hasVariables Boolean  @default(false)
   stock        Int      @default(0)
 
-  
   ProductVariant ProductVariant[]
-
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
   ProductImage ProductImage[]
+  OrderItem    OrderItem[]
 
   @@index([gender])
   @@index([categoryId])
@@ -57,30 +56,27 @@ model ProductImage {
   id  String @id @default(uuid())
   url String
 
-  
   product   Product @relation(fields: [productId], references: [id])
   productId String
 }
 
-
 model Attribute {
-  id               String             @id @default(uuid())
-  name             String
-
-  ProductVariantAttribute ProductVariantAttribute[] 
-}
-
-
-model ProductVariant {
-  id       String   @id @default(uuid())
-  productId String
-  stock    Int      @default(0)
-
-  product Product @relation(fields: [productId], references: [id])
+  id   String @id @default(uuid())
+  name String
 
   ProductVariantAttribute ProductVariantAttribute[]
 }
 
+model ProductVariant {
+  id        String @id @default(uuid())
+  productId String
+  stock     Int    @default(0)
+
+  product Product @relation(fields: [productId], references: [id])
+
+  ProductVariantAttribute ProductVariantAttribute[]
+  OrderItem               OrderItem[]
+}
 
 model ProductVariantAttribute {
   variantId   String
@@ -93,7 +89,6 @@ model ProductVariantAttribute {
   @@unique([variantId, attributeId, value])
 }
 
-
 model User {
   id            String    @id @default(uuid())
   name          String
@@ -104,13 +99,15 @@ model User {
   image         String?
 
   address UserAddress[]
+  Order   Order[]
 }
 
 model Country {
-  id            String    @id
-  name          String
+  id   String @id
+  name String
 
-  UserAddress UserAddress[]
+  UserAddress  UserAddress[]
+  OrderAddress OrderAddress[]
 }
 
 model UserAddress {
@@ -128,5 +125,63 @@ model UserAddress {
   countryId String
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String 
+  userId String
+}
+
+// Orden
+model Order {
+  id           Int       @id @default(autoincrement())
+  subTotal     Float
+  tax          Float
+  total        Float
+  itemsInOrder Int
+  isPaid       Boolean   @default(false)
+  paidAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  OrderItem    OrderItem[]
+  OrderAddress OrderAddress?
+}
+
+model OrderItem {
+  id           String @id @default(uuid())
+  title        String
+  quantity     Int
+  normal_price Float  @default(0)
+  offer_price  Float  @default(0)
+
+  // Relaciones
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  variantId String?
+}
+
+model OrderAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  city       String
+  phone      String
+  userId     String
+
+  // Relaciones
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  Order   Order @relation(fields: [orderId], references: [id])
+  orderId Int   @unique
 }

@@ -26,15 +26,17 @@ export const VariableSelector = ({
     onAttributeSelected,
     selectedAttributes,
 }: Props) => {
-    let totalStock = 0;
+    
 
-    // Calcular el stock total
-    if (hasVariables) {
-        totalStock = variants.reduce((sum, variant) => sum + variant.stock, 0);
-    } else {
-        // Si no tiene variables, usar el stock total del producto
-        totalStock = productStock;
-    }
+    // // Calcular el stock total
+    // let totalStock = 0;
+
+    // if (hasVariables) {
+    //     totalStock = variants.reduce((sum, variant) => sum + variant.stock, 0);
+    // } else {
+    //     // Si no tiene variables, usar el stock total del producto
+    //     totalStock = productStock;
+    // }
 
     // Agrupar los valores de atributos por su tipo (Talla, Color, etc.)
     const groupedAttributes = variants.reduce((acc, variant) => {
@@ -51,7 +53,6 @@ export const VariableSelector = ({
 
     return (
         <div>
-            <h2 className="mb-4">Stock: {totalStock}</h2>
             {Object.entries(groupedAttributes).map(
                 ([attributeName, attributeValues]) => (
                     <div key={attributeName} className="mb-6">

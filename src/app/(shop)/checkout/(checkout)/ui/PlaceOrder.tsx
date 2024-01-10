@@ -1,5 +1,6 @@
 "use client";
 
+import { placeOrder } from "@/actions";
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export const PlaceOrder = () => {
     const [loaded, setLoaded] = useState(false);
-    const [isPlacingOrder, setisPlacingOrder] = useState(false)
+    const [isPlacingOrder, setisPlacingOrder] = useState(false);
 
     const address = useAddressStore((state) => state.address);
 
@@ -15,26 +16,27 @@ export const PlaceOrder = () => {
         state.getSummaryInformation()
     );
 
-    const cart = useCartStore ( state => state.cart );
+    const cart = useCartStore((state) => state.cart);
 
     useEffect(() => {
         setLoaded(true);
     }, []);
 
-    const onPlaceOrder = async() =>{
+    const onPlaceOrder = async () => {
         setisPlacingOrder(true);
         //await sleep(2);
 
-        const productsToOrder = cart.map( product => ({
-            productId : product.id,
+        const productsToOrder = cart.map((product) => ({
+            productId: product.id,
             quantity: product.quantity,
-            variant: product.variant,
-        }))
+            variantId: product.variant?.id,
+        }));
 
-        console.log({address, productsToOrder})
+        const resp = await placeOrder(productsToOrder, address);
+        console.log(resp);
 
         setisPlacingOrder(false);
-    }
+    };
 
     if (!loaded) {
         return <p>Cargando..</p>;
@@ -44,7 +46,9 @@ export const PlaceOrder = () => {
         <div className="bg-white rounded-xl shadow-xl p-7">
             <h2 className="text-2xl mb-2">Dirección de entrega</h2>
             <div className="mb-10">
-                <p className="text-xl">{address.firstName} {address.lastName}</p>
+                <p className="text-xl">
+                    {address.firstName} {address.lastName}
+                </p>
                 <p>{address.address}</p>
                 <p>{address.address2}</p>
                 <p>{address.country}</p>
@@ -96,12 +100,10 @@ export const PlaceOrder = () => {
                 <button
                     //href="/orders/123"
                     onClick={onPlaceOrder}
-                    className={
-                        clsx({
-                            'btn-primary': !isPlacingOrder,
-                            'btn-disabled': isPlacingOrder
-                        })
-                    }
+                    className={clsx({
+                        "btn-primary": !isPlacingOrder,
+                        "btn-disabled": isPlacingOrder,
+                    })}
                 >
                     Realizar Pedido
                 </button>
