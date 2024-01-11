@@ -23,7 +23,7 @@ export default async function HomePage({ searchParams }: Props) {
     }
 
     return (
-        <>
+        <div className="px-2">
             <Title
                 title="Tienda"
                 subtitle="Todos los productos"
@@ -32,6 +32,7 @@ export default async function HomePage({ searchParams }: Props) {
             <ProductGrid products={products} />
 
             <Pagination totalPages={totalPages}/>
-        </>
+        </div>
+        
     );
 }
