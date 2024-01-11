@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 interface State {
     address: {
-        id: string;
+        //id: string; // si se habilita da error en el formulario, si se quita da error en PlaceOreder.tsx
         firstName: string;
         lastName: string;
         address: string;
