@@ -9,13 +9,15 @@ interface State {
     addProductTocart: (product: CartProduct) => void;
     getTotalItems: () => number;
     getSummaryInformation: () => {
-            subTotal: number;
-            tax: number;
-            total: number;
-            itemsInCart: number;
+        subTotal: number;
+        tax: number;
+        total: number;
+        itemsInCart: number;
     };
     updateProductQuantity: (product: CartProduct, quantity: number) => void;
     removeProduct: (product: CartProduct) => void;
+
+    clearCart: () => void;
 }
 
 export const useCartStore = create<State>()(
@@ -110,6 +112,10 @@ export const useCartStore = create<State>()(
                 );
 
                 set({ cart: updatedCartProducts });
+            },
+
+            clearCart: () => {
+                set({ cart: [] });
             },
         }),
 

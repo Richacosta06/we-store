@@ -163,7 +163,7 @@ export const placeOrder = async (
             });
 
             //Crear Direccion de la orden
-            const { country, id, ...restAddress } = address;
+            const { country, id,  ...restAddress } = address;
 
             const orderAddress = await tx.orderAddress.create({
                 data: {
