@@ -44,8 +44,9 @@ export const Sidebar = () => {
             {/* //todo: efecto slice */}
             <nav
                 className={clsx(
-                    "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
+                    "fixed p-5 right-0 top-0 h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
                     {
+                        "w-[300px] sm:w-[300px] md:w-[375px] lg:w-[500px]": true,
                         "translate-x-full": !isSideMenuOpen,
                     }
                 )}
