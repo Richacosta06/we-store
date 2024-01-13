@@ -1,23 +1,39 @@
-// https://tailwindcomponents.com/component/hoverable-table
 export const revalidate = 0;
+// https://tailwindcomponents.com/component/hoverable-table
 
-import { getOrdersByUser } from "@/actions";
-import { Title } from "@/components";
-import { redirect } from "next/dist/server/api-utils";
+import { getPaginatedOrders, getPaginatedOrdersByUser } from "@/actions";
+import { Pagination, Title } from "@/components";
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { IoCardOutline } from "react-icons/io5";
 
-export default async function OrdersPage() {
-    const { ok, orders = [] } = await getOrdersByUser();
+interface Props {
+    searchParams: {
+        page?: string;
+    };
+}
 
-    // if ( !ok ) {
-    //     redirect('/auth/login');
-    // }
+export default async function OrdersPage({ searchParams }: Props) {
+    const page = searchParams.page ? parseInt(searchParams.page) : 1;
+
+    const { ok, orders, currentPage, totalPages } = await getPaginatedOrdersByUser({
+        page,
+    });
+
+    if (orders?.length === 0) {
+        redirect("/");
+    }
+
+    //const { ok, orders = [] } = await getPaginatedOrders();
+
+    if (!ok) {
+        redirect("/auth/login");
+    }
 
     return (
         <>
-            <Title title="Pedidos" />
+            <Title title="Ordenes" />
 
             <div className="mb-10">
                 <table className="min-w-full">
@@ -39,7 +55,13 @@ export default async function OrdersPage() {
                                 scope="col"
                                 className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                             >
-                                Pago
+                                Monto
+                            </th>
+                            <th
+                                scope="col"
+                                className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                            >
+                                Estado del pago
                             </th>
                             <th
                                 scope="col"
@@ -50,7 +72,7 @@ export default async function OrdersPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map((order) => (
+                        {orders?.map((order) => (
                             <tr
                                 key={order.id}
                                 className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
@@ -62,16 +84,20 @@ export default async function OrdersPage() {
                                     {order.OrderAddress?.firstName}{" "}
                                     {order.OrderAddress?.lastName}
                                 </td>
+                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    {order.total}
+                                </td>
                                 <td className="flex items-center text-sm  text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    <IoCardOutline className="text-green-800" />
                                     {order.isPaid ? (
                                         <>
+                                            <IoCardOutline className="text-green-800" />
                                             <span className="mx-2 text-green-800">
                                                 Pagada
                                             </span>
                                         </>
                                     ) : (
                                         <>
+                                            <IoCardOutline className="text-red-800" />
                                             <span className="mx-2 text-red-800">
                                                 No Pagada
                                             </span>
@@ -80,7 +106,7 @@ export default async function OrdersPage() {
                                 </td>
                                 <td className="text-sm text-gray-900 font-light px-6 ">
                                     <Link
-                                        href={`orders/${order.id}`}
+                                        href={`/orders/${order.id}`}
                                         className="hover:underline"
                                     >
                                         Ver orden
@@ -88,9 +114,10 @@ export default async function OrdersPage() {
                                 </td>
                             </tr>
                         ))}
-
                     </tbody>
                 </table>
+
+                <Pagination totalPages={totalPages || 1} />
             </div>
         </>
     );

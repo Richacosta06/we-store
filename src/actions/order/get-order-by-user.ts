@@ -17,6 +17,9 @@ export const getOrdersByUser = async () => {
         where: {
             userId: session.user.id,
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         include: {
             OrderAddress: {
                 select: {

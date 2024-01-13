@@ -21,3 +21,6 @@ export * from './payments/paypal-check-payment';
 export * from './address/delete-user-address';
 export * from './address/get-user-address';
 export * from './address/set-user-address';
+
+export * from './order/get-paginated-orders';
+export * from './order/get-paginated-orders-by-user';
