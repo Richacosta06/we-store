@@ -1,6 +1,7 @@
 "use client";
 
 import { placeOrder } from "@/actions";
+//import Payment from "@/payment/payment/Payment";
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
@@ -8,11 +9,19 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormState } from 'react-dom';
 
+interface PaymentDetails {
+    amount: number;
+    tax: number;
+    description: string;
+}
+
 export const PlaceOrder = () => {
     const router = useRouter();
     const [loaded, setLoaded] = useState(false);
     const [errorMessage, seterrorMessage] = useState('');
     const [isPlacingOrder, setsPlacingOrder] = useState(false);
+
+    //const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
 
     const address = useAddressStore((state) => state.address);
 
@@ -42,11 +51,20 @@ export const PlaceOrder = () => {
         //Server Action
         const resp = await placeOrder(productsToOrder, address);
         if ( !resp.ok ){
-            setsPlacingOrder(false);
             seterrorMessage(resp.message);
+            setsPlacingOrder(false);
             return;
         }
-        clearCart();
+
+        // setPaymentDetails({
+        //     amount: resp.order?.subTotal ?? 0, 
+        //     tax: resp.order?.tax ?? 0,         
+        //     description: `Pago orden ${resp.prismaTx?.order.id ?? ''}`, 
+        // });
+        
+
+        
+       clearCart();  
         router.replace('/orders/' + resp.order?.id)
 
     };
@@ -108,6 +126,13 @@ export const PlaceOrder = () => {
                         </a>
                     </span>
                 </p>
+                {/* {paymentDetails && (
+                <Payment
+                    amount={paymentDetails.amount} 
+                    tax={paymentDetails.tax} 
+                    description={paymentDetails.description} 
+                />
+            )} */}
 
                 <p className="text-red-500">{errorMessage}</p> 
                 <button

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Script from 'next/script'
+
 
 import { Title } from "@/components";
 import Image from "next/image";
@@ -25,6 +27,10 @@ export default function CheckoutPage() {
 
                     {/* Checkout - Resumen de orden */}
                     <PlaceOrder/>
+
+                    <Script src="https://secure.paguelofacil.com/HostedFields/vendor/scripts/WALLET/PFScript.js" 
+                        strategy="beforeInteractive"
+                    />
 
                 </div>
             </div>

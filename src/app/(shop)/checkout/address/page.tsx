@@ -19,7 +19,7 @@ export default async function AddressPage() {
 
     const userAddresses = (await getUserAddress(session.user.id)) ?? [];
 
-    console.log(userAddresses);
+    //console.log(userAddresses);
 
     return (
         <div className="flex flex-col sm:justify-center sm:items-center mb-72 px-10 sm:px-0">
