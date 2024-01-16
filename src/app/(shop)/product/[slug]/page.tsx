@@ -2,7 +2,7 @@ export const revalidate = 604800; //7 Dias
 
 import notFound from "../not-found";
 import { titleFont } from "@/config/fonts";
-import { ProductMobileSlideshow, ProductSlideshow } from "@/components";
+import { CreditCalculator, ProductMobileSlideshow, ProductSlideshow } from "@/components";
 import { getProductBySlug } from "@/actions";
 import { ResolvingMetadata } from "next/types";
 import AddToCart from "./ui/AddToCart";
@@ -94,6 +94,8 @@ export default async function ProductBySlugPage({ params }: Props) {
                 {/* Descripción */}
                 <h3 className="font-bold text-sm">Descripción</h3>
                 <p className="font-light">{product.description}</p>
+
+                <CreditCalculator price={product.normal_price}/>
             </div>
         </div>
     );

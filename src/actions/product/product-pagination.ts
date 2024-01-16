@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 
 
+
 interface PaginationOptions {
     page?: number;
     take?: number;
@@ -27,6 +28,11 @@ export const getPaginatedProductsWithImages = async ({
                     take: 2,
                     select: {
                         url: true,
+                    },
+                },
+                category: {
+                    select: {
+                        name: true,
                     },
                 },
             },

@@ -17,5 +17,11 @@ export * from './paypal/PayPalButton';
 
 export * from './orders/OrderStatus';
 
+export * from './porduct/credit-calculator/credit-calculator';
+
+export * from './porduct/product-image/ProductImage';
+
+
+
 
 

@@ -24,3 +24,6 @@ export * from './address/set-user-address';
 
 export * from './order/get-paginated-orders';
 export * from './order/get-paginated-orders-by-user';
+
+export * from './user/change-user-role';
+export * from './user/get-paginated-user';
