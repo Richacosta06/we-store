@@ -6,7 +6,6 @@ import { CreditCalculator, ProductMobileSlideshow, ProductSlideshow } from "@/co
 import { getProductBySlug } from "@/actions";
 import { ResolvingMetadata } from "next/types";
 import AddToCart from "./ui/AddToCart";
-import { Product } from '../../../../interfaces/product.interface';
 import { currencyFormat } from "@/utils";
 
 interface Props {

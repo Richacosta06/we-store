@@ -9,7 +9,7 @@ interface Props {
   height: number;
 }
 
-export const ProductImage = ({
+export const ProductImages = ({
   src,
   alt,
   className,
