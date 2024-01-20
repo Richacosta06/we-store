@@ -48,10 +48,10 @@ async function main() {
             data: {
                 ...rest,
                 categoryId: categoriesMap[type],
-                normal_price: price,
-                offer_price: price - price / 1.2,
+                normal_price: parseFloat((price).toFixed(2)), 
+                offer_price: parseFloat((price - price / 1.2).toFixed(2)), 
                 hasVariables: hasVariables,
-                stock: hasVariables ? 0 : 100, // Assign stock if no variants
+                stock: hasVariables ? 0 : 100, 
             },
         });
 

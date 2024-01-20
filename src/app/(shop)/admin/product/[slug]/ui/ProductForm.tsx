@@ -1,16 +1,17 @@
 "use client";
 
-import { ProductWithImagesAndVariants } from "@/actions";
+import { ProductWithImagesAndVariants, createUpdateProduct } from "@/actions";
 import { Variant } from "@/app/(shop)/product/[slug]/ui/AddToCart";
 import { ProductImages } from "@/components";
 import { Category, ProductImage } from "@/interfaces";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
     product:
-        | (ProductWithImagesAndVariants & { ProductImage?: ProductImage[] })
-        | null;
+    | (ProductWithImagesAndVariants & { ProductImage?: ProductImage[] })
+    | null;
     categories: Category[];
 }
 
@@ -32,7 +33,10 @@ interface FormInputs {
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
+    
+    const router = useRouter();
     const variants = product?.variants ?? [];
+    
 
     const {
         handleSubmit,
@@ -66,12 +70,45 @@ export const ProductForm = ({ product, categories }: Props) => {
 
     const onSubmit = async (data: FormInputs) => {
         console.log(data);
-        //const formData = new FormData();
+        const formData = new FormData();
 
-        //const { images, ...productToSave } = data;
+        const { images, ...productToSave } = data;
 
-        //if ( product?.id ){
-        //formData.append("id", product.id ?? "");
+        if (product?.id) {
+            formData.append("id", product.id ?? "");
+        };
+
+
+        for (const key in data) {
+            if (key !== 'variants' && key !== 'images') {
+                formData.append(key, (data as any)[key]);
+            }
+        }
+        
+        // formData.append("title", productToSave.title);
+        // formData.append("slug", productToSave.slug);
+        // formData.append("description", productToSave.description);
+        // formData.append("price", productToSave.normal_price.toString());
+        // formData.append("offer-price", productToSave.offer_price.toString());
+        // formData.append("inStock", productToSave.stock.toString());
+        // formData.append("variants", productToSave.variants.toString());
+        // formData.append("tags", productToSave.tags);
+        // formData.append("categoryId", productToSave.categoryId);
+        // formData.append("gender", productToSave.gender);
+
+        if (data.variants) {
+            formData.append('variants', JSON.stringify(data.variants));
+        }
+
+        const { ok, product:updatedProduct } = await createUpdateProduct ( formData );
+
+        if ( !ok ) {
+            alert ('No se pudo grabar el producto');
+            return;
+        }
+        
+        router.replace(`/admin/product/${updatedProduct?.slug}`)
+
     };
 
     return (
@@ -195,7 +232,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                         id="hasVariables"
                         {...register("hasVariables")}
                         onChange={(e) => {
-                            
+
                             if (variants.length === 0 || e.target.checked) {
                                 setValue("hasVariables", e.target.checked);
                             }

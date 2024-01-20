@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCartStore } from "@/store";
-import { QuantitySelector } from "@/components";
+import { ProductImages, QuantitySelector } from "@/components";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -39,8 +39,8 @@ export const ProductsInCart = () => {
                     }`}
                     className="flex mb-5"
                 >
-                    <Image
-                        src={`/products/${product.image}`}
+                    <ProductImages
+                        src={product.image}
                         width={100}
                         height={100}
                         style={{
