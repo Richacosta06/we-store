@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 cloudinary.config( process.env.CLOUDINARY_URL ?? '' );
 
 
-export const deleteProductImage = async( imageId: number, imageUrl: string ) => {
+export const deleteProductImage = async( imageId: string, imageUrl: string ) => {
 
   if ( !imageUrl.startsWith('http') ) {
     return {
@@ -35,7 +35,6 @@ export const deleteProductImage = async( imageId: number, imageUrl: string ) => 
         }
       }
     })
-
 
 
     // Revalidar los paths

@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductWithImagesAndVariants, createUpdateProduct } from "@/actions";
+import { ProductWithImagesAndVariants, createUpdateProduct, deleteProductImage } from "@/actions";
 import { Variant } from "@/app/(shop)/product/[slug]/ui/AddToCart";
 import { ProductImages } from "@/components";
 import { Category, ProductImage } from "@/interfaces";
@@ -84,20 +84,15 @@ export const ProductForm = ({ product, categories }: Props) => {
                 formData.append(key, (data as any)[key]);
             }
         }
-        
-        // formData.append("title", productToSave.title);
-        // formData.append("slug", productToSave.slug);
-        // formData.append("description", productToSave.description);
-        // formData.append("price", productToSave.normal_price.toString());
-        // formData.append("offer-price", productToSave.offer_price.toString());
-        // formData.append("inStock", productToSave.stock.toString());
-        // formData.append("variants", productToSave.variants.toString());
-        // formData.append("tags", productToSave.tags);
-        // formData.append("categoryId", productToSave.categoryId);
-        // formData.append("gender", productToSave.gender);
 
         if (data.variants) {
             formData.append('variants', JSON.stringify(data.variants));
+        }
+
+        if ( images ) {
+            for ( let i = 0; i < images.length; i++  ) {
+              formData.append('images', images[i]);
+            }
         }
 
         const { ok, product:updatedProduct } = await createUpdateProduct ( formData );
@@ -343,9 +338,10 @@ export const ProductForm = ({ product, categories }: Props) => {
                         <span className="font-semibold">Fotos</span>
                         <input
                             type="file"
+                            {...register('images')}
                             multiple
                             className="p-2 border rounded-md bg-gray-200"
-                            accept="image/png, image/jpeg"
+                            accept="image/png, image/jpeg, image/avif"
                         />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -354,17 +350,17 @@ export const ProductForm = ({ product, categories }: Props) => {
                                 <ProductImages
                                     alt={product.title ?? ""}
                                     src={image.url}
-                                    width={300}
-                                    height={300}
+                                    width={600}
+                                    height={600}
                                     className="rounded-t shadow-md"
                                 />
 
                                 <button
                                     type="button"
                                     onClick={() =>
-                                        console.log(image.id, image.url)
+                                        deleteProductImage(image.id, image.url) 
                                     }
-                                    //onClick={() => deleteProductImage(image.id, image.url)}
+                            
                                     className="btn-danger w-full rounded-b-xl btn-danger"
                                 >
                                     Eliminar

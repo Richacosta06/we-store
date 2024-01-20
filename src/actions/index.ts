@@ -31,3 +31,4 @@ export * from './user/get-paginated-user';
 export * from './category/get-categories';
 
 export * from './product/create-update-product';
+export * from './product/delete-product-image';
