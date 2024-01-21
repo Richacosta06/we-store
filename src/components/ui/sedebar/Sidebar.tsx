@@ -74,26 +74,26 @@ export const Sidebar = () => {
                         <Link
                             href="/profile"
                             onClick={() => closeMenu()}
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoPersonOutline size={20} />
-                            <span className="ml-3 text-xl">Perfil</span>
+                            <span className="ml-3 text-lg">Perfil</span>
                         </Link>
 
                         <Link
                             href="/orders"
                             onClick={() => closeMenu()}
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoTicketOutline size={20} />
-                            <span className="ml-3 text-xl">Ordenes</span>
+                            <span className="ml-3 text-lg">Ordenes</span>
                         </Link>
                     </>
                 )}
 
                 {isAuthenticated && (
                     <button
-                        className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                        className="flex w-full items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         onClick={() => {
                             logout();
                             closeMenu();
@@ -101,17 +101,17 @@ export const Sidebar = () => {
                         }}
                     >
                         <IoLogOutOutline size={20} />
-                        <span className="ml-3 text-xl">Salir</span>
+                        <span className="ml-3 text-lg">Salir</span>
                     </button>
                 )}
                 {!isAuthenticated && (
                     <Link
                         href="/auth/login"
-                        className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                        className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         onClick={() => closeMenu()}
                     >
                         <IoLogInOutline size={20} />
-                        <span className="ml-3 text-xl">Ingresar</span>
+                        <span className="ml-3 text-lg">Ingresar</span>
                     </Link>
                 )}
 
@@ -123,34 +123,34 @@ export const Sidebar = () => {
                             href="/admin/products"
                             onClick={() => closeMenu()}
 
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoShirtOutline size={20} />
-                            <span className="ml-3 text-xl">Productos</span>
+                            <span className="ml-3 text-lg">Productos</span>
                         </Link>
                         <Link
                             href="/admin/orders"
                             onClick={() => closeMenu()}
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoTicketOutline size={20} />
-                            <span className="ml-3 text-xl">Ordenes</span>
+                            <span className="ml-3 text-lg">Ordenes</span>
                         </Link>
                         <Link
                             href="/admin/users"
                             onClick={() => closeMenu()}
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoPeopleOutline size={20} />
-                            <span className="ml-3 text-xl">Usuarios</span>
+                            <span className="ml-3 text-lg">Usuarios</span>
                         </Link>
                         <Link
                             href="/admin/configuration"
                             onClick={() => closeMenu()}
-                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            className="flex items-center mt-5 p-2 hover:bg-gray-100 rounded transition-all"
                         >
                             <IoPeopleOutline size={20} />
-                            <span className="ml-3 text-xl">Configuración</span>
+                            <span className="ml-3 text-lg">Configuración</span>
                         </Link>
                     </>
                 )}

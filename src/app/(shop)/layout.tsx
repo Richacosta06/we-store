@@ -7,11 +7,17 @@ export default function ShopLayout({
 }) {
     return (
         <main className="bg-gray-100 min-h-screen pb-1">
-            <TopMenu />
-            <Sidebar/>
+            <div className="flex flex-col min-h-screen bg-gray-100">
+                <TopMenu />
+                <Sidebar />
 
-            <div className="px-0 sm:px-10">{children}</div>
-            <Footer/>
+                
+                <main className="flex-grow px-0 sm:px-10">
+                    {children}
+                </main>
+
+                <Footer />
+            </div>
         </main>
     );
 }

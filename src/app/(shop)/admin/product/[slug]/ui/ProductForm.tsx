@@ -273,7 +273,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                                 {variants.map((variant, index) => (
                                     <tr
                                         key={variant.id}
-                                        className="border-b border-gray-300"
+                                        className="border-b border-gray-300 bg-white"
                                     >
                                         {attributeNames.map((attr) => (
                                             <td
